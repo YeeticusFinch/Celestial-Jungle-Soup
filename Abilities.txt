@@ -19,7 +19,7 @@ Brad: Sword, Spiritual Weapon, Spirit Guardians, Cure Wounds
 Kohou: Claws, Sun Bolt, Dash, Stunning Strike (pickles)
 Tom Nightshade: Mouth Sword, Crossbow, Crimson Rite of Fire, Blood Curse of Binding (stun)
 Hastur: Eldritch Blast (knockback), Tentacle, Misty Step, Darkness
--Einma: Firebolt, Magic Missiles (4), Pulse Wave, Slow
+-Einma: Firebolt, Magic Missiles (2), Pulse Wave, Slow
 Basti: Greatsword, Firebolt, Manifest Echo, Swap places with Echo
 Puw: Vicious Mockery, Pistol, Silence, Hideous Laughter (stun)
 
