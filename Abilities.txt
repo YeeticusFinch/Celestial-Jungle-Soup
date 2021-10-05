@@ -4,7 +4,7 @@ Left Click, Right Click, Spacebar, Shift
 -Rudy: Arrow, Poison Bolt, Hunter's Mark, Goodberry
 -Fern: Flame Blade, Sacred Flame, Levitate (dash), Cure Wounds
 -Lilly: Spear, Moonbeam, Fairy Form, Healing Spirit
-Kumari: Rapier, Arrow, Crimson Rite of Storm, Crimson Rite of Dawn 
+-Kumari: Rapier, Arrow, Crimson Rite of Storm, Crimson Rite of Dawn 
 Rok: Axe, Fire Breath, Hellhound Form, Rage
 -Roscoe: Shortsword, Dart, Donkey, Fade Away (invisibility)
 -Ezra: Greatsword, Healing Hands, Wings, Rage (wild surge)
@@ -12,19 +12,19 @@ Rok: Axe, Fire Breath, Hellhound Form, Rage
 -Tenzo: Punch, Sun Bolt, Dash, Stunning Strike
 -Ollie: Big Iron, -5+10, Haste, Pushing Attack
 -Xenerich: Arrow, Glowing Arrow, Dash, Invisibility
-Knope: Call Lightning, Healing Word, Insect Swarm, Conjure Animals
+Knope: Call Lightning, Healing Word, Insect Swarm, Wildshape
 Brad: Sword, Spiritual Weapon, Spirit Guardians, Cure Wounds
 -Beerstein: Charged Warhammer, Magic Missiles (7), Shatter, Shield
 
 -Kohou: Claws, Sun Bolt, Dash, Stunning Strike (pickles)
-Tom Nightshade: Mouth Sword, Crossbow, Crimson Rite of Fire, Blood Curse of Binding (stun)
+-Tom Nightshade: Mouth Sword, Crossbow, Crimson Rite of Fire, Blood Curse of Binding (stun)
 Hastur: Eldritch Blast (knockback), Tentacle, Misty Step, Darkness
 -Einma: Firebolt, Magic Missiles (2), Pulse Wave, Slow
 Basti: Greatsword, Firebolt, Manifest Echo, Swap places with Echo
 Puw: Vicious Mockery, Pistol, Silence, Hideous Laughter (stun)
 
 -MetalMythiccc: fireball, magic missiles (4), chronal shift, shield
-Stalin: hammer, pistol, communist staff, rage
+Stalin: hammer, pistol, some communist thing, rage
 -Durrith: dagger, guiding bolt, pyrotechnics (smoke), cure wounds
 
 -Acoda: Disintegrate, Ray of Enfeeblement, Globe of Invulnerability, Time Stop
