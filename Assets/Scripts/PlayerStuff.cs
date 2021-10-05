@@ -29,6 +29,7 @@ public class PlayerStuff : NetworkBehaviour {
     Vector3 camPos = new Vector3(0, 0, -12);
     float camAcc = 0;
     Vector2 drift = new Vector2(0, 0);
+    Vector2 teleport = new Vector2(0, 0);
     public static int playerCount;
     [SyncVar(hook = "OnNumChange")] public int playerNum = -1;
     int tempX, tempY;
@@ -47,6 +48,7 @@ public class PlayerStuff : NetworkBehaviour {
     [SyncVar(hook = "OnUnicycleChange")] bool unicycle = false;
     [SyncVar(hook = "OnInvisibleChange")] bool invisible = false;
     private GameObject spawnedUnicycle = null;
+    private GameObject aura = null;
     int poison = 0;
     public int slow = 0;
     int stun = 0;
@@ -56,6 +58,7 @@ public class PlayerStuff : NetworkBehaviour {
     int glowing = 0;
     int marked = 0;
     int windwalk = 0;
+    public int crimsonrite = 0;
     public int frozen = 0;
     public bool moonbeam = false;
     Color32 c0 = new Color32(0, 0, 0, (byte)255);
@@ -153,11 +156,11 @@ public class PlayerStuff : NetworkBehaviour {
 
         "Rapier",//
         "Bolt",//
-        "Crimson Rite of Storm",
-        "Crimson Rite of Dawn",
+        "Crimson Rite of Storm",//
+        "Crimson Rite of Dawn",//
 
         "Greataxe",//
-        "Fire Breath",
+        "Fire Breath",//
         "Hellhound Form",
         "Rage",//
 
@@ -207,13 +210,13 @@ public class PlayerStuff : NetworkBehaviour {
         "Stunning Strike",//
 
         "Mouth Sword",//
-        "Hand Crossbow",
-        "Crimson Rite of Fire",
-        "Blood Curse of Binding",
+        "Hand Crossbow",//
+        "Crimson Rite of Fire",//
+        "Blood Curse of Binding",//
 
         "Eldritch Blast",//
         "Grasp of the Deep",
-        "Misty Step",
+        "Misty Step",//
         "Darkness",
 
         "Firebolt",//
@@ -884,14 +887,17 @@ public class PlayerStuff : NetworkBehaviour {
     void Fire2(Vector2 vel, Vector3 pos, string name, int owner, int seed)
     {
         GameObject instantiatedProjectile = Instantiate(Resources.Load(name), pos, Quaternion.Euler(0, 0, 0)) as GameObject;
-        if (name[0] != 'y' && !name.Substring(0,4).Equals("fire"))
+        if (name[0] != 'y' && !(name.Length > 3 && name.Substring(0,4).Equals("fire")))
         {
             instantiatedProjectile.GetComponent<bfly>().xVel = vel.x*4;
             instantiatedProjectile.GetComponent<bfly>().yVel = vel.y*4;
             if (instantiatedProjectile.GetComponent<bfly>().damage == 0)
                 instantiatedProjectile.GetComponent<bfly>().damage = (int)(10 * Mathf.Sqrt(vel.x * vel.x + vel.y * vel.y)) / (weakness > 0 ? 2 : 1) + (raging > 0 ? 3 : 0);
-            instantiatedProjectile.transform.localScale = new Vector3(1, 1, 1);
+            if (!name.Equals("c8"))
+                instantiatedProjectile.transform.localScale = new Vector3(1, 1, 1);
         }
+        if (name.Equals("c8"))
+            instantiatedProjectile.GetComponent<bfly>().damage = 2;
         instantiatedProjectile.transform.Rotate(0, 0, seed * 0.01f * instantiatedProjectile.GetComponent<bfly>().randomness);
         instantiatedProjectile.GetComponent<bfly>().owner = owner;
         instantiatedProjectile.GetComponent<bfly>().seed = seed;
@@ -1146,7 +1152,14 @@ public class PlayerStuff : NetworkBehaviour {
                 trail(rb.position + Time.fixedDeltaTime * (new Vector2(moveX, moveY)), new Vector2(moveX, moveY), "spark4");
             }
             moveX += drift.x;
-            moveY += drift.y;
+            moveY += drift.y; 
+            /*if (teleport.x != 0 || teleport.y != 0)
+            {
+                moveX += teleport.x * 7.273f;
+                moveY += teleport.y * 7.273f;
+                teleport.x = 0;
+                teleport.y = 0;
+            }*/
             drift *= 0.6f;
             if (Mathf.Abs(drift.x) < 0.01) drift.x = 0;
             if (Mathf.Abs(drift.y) < 0.01) drift.y = 0;
@@ -1398,6 +1411,41 @@ public class PlayerStuff : NetworkBehaviour {
         shed.flipX = flipped;
         Mouse.transform.position = new Vector3(mouseX, mouseY, 0);
 
+        if (crimsonrite == 1) // flame
+        {
+            if (aura == null)
+            {
+                aura = Instantiate(Resources.Load("aura"), transform.position, Quaternion.Euler(0, 0, 0)) as GameObject;
+                aura.GetComponent<SpriteRenderer>().sortingLayerName = "Obstacle";
+            }
+            aura.GetComponent<SpriteRenderer>().sprite = Resources.Load("images/auras/flame" + (int)(Time.time * 10) % 8, typeof(Sprite)) as Sprite;
+            aura.transform.position = transform.position - transform.up * 0.45f - transform.right * 0.1f;
+        } else if (crimsonrite == 2) // lightning
+        {
+            if (aura == null)
+            {
+                aura = Instantiate(Resources.Load("aura"), transform.position, Quaternion.Euler(0, 0, 0)) as GameObject;
+                aura.GetComponent<SpriteRenderer>().sortingLayerName = "Obstacle";
+                aura.transform.localScale *= 1.3f;
+            }
+            aura.GetComponent<SpriteRenderer>().sprite = Resources.Load("images/auras/arc" + (int)(Time.time * 12) % 8, typeof(Sprite)) as Sprite;
+            aura.transform.position = transform.position - transform.up * 0.59f;
+        } else if (crimsonrite == 3) // radiant
+        {
+            if (aura == null)
+            {
+                aura = Instantiate(Resources.Load("aura"), transform.position, Quaternion.Euler(0, 0, 0)) as GameObject;
+                aura.GetComponent<SpriteRenderer>().sortingLayerName = "Particle";
+                aura.transform.localScale *= 1.4f;
+            }
+            aura.GetComponent<SpriteRenderer>().sprite = Resources.Load("images/auras/light" + (int)(Time.time * 10) % 7, typeof(Sprite)) as Sprite;
+            aura.transform.position = transform.position + transform.up * 0.5f;
+        }
+        if (crimsonrite == 0 && aura != null) {
+            GameObject.Destroy(aura);
+            aura = null;
+        }
+
         if (localPlayer)
         {
             if (chara == 13 && unicycle)
@@ -1538,6 +1586,7 @@ public class PlayerStuff : NetworkBehaviour {
             sword.GetComponent<bfly>().noDie = true;
             sword.GetComponent<bfly>().penetration = true;
             sword.GetComponent<bfly>().melee = false;
+            sword.GetComponent<bfly>().stat = true;
             sword.GetComponent<bfly>().owner_obj = this.gameObject;
             sword.GetComponent<bfly>().knockback = 0;
             if (chara != 8)
@@ -1653,6 +1702,20 @@ public class PlayerStuff : NetworkBehaviour {
                 {
                     invisible = !invisible;
                 }
+                else if (chara == 10)
+                {
+                    cooldown = 6;
+                    crimsonrite = 2;
+                    int seed = Random.Range(-100, 100);
+                    HP -= 1;
+                    if (!isServer)
+                    {
+                        CmdFire2(new Vector2(moveX, moveY) * stats[5 * chara + 1]*0.3f, rb.position, "lightning", playerNum, seed);
+                        //Fire2(new Vector2(moveX, moveY), rb.position, "c8, playerNum, seed);
+                    }
+                    else
+                        RpcFire2(new Vector2(moveX, moveY) * stats[5 * chara + 1]*0.3f, rb.position, "lightning", playerNum, seed);
+                }
                 else if (chara == 12)
                 {
                     unicycle = !unicycle;
@@ -1687,7 +1750,29 @@ public class PlayerStuff : NetworkBehaviour {
                     canSpace = false;
                     cooldown = 4;
                     shockwave(mouseX, mouseY);
-                } else if (chara == 23)
+                }
+                else if (chara == 21)
+                {
+                    cooldown = 6;
+                    crimsonrite = 1;
+                    HP -= 1;
+                    int seed = Random.Range(-100, 100);
+                    if (!isServer)
+                    {
+                        CmdFire2(new Vector2(moveX, moveY) * stats[5 * chara + 1] * 0.3f, rb.position, "c8", playerNum, seed);
+                        //Fire2(new Vector2(moveX, moveY), rb.position, "c8, playerNum, seed);
+                    }
+                    else
+                        RpcFire2(new Vector2(moveX, moveY) * stats[5 * chara + 1] * 0.3f, rb.position, "c8", playerNum, seed);
+                }
+                else if (chara == 22)
+                {
+                    cooldown = 3;
+                    shockwave(mouseX, mouseY);
+                    teleport.x = (mouseX - transform.position.x);
+                    teleport.y = (mouseY - transform.position.y);
+                }
+                else if (chara == 23)
                 {
                     canSpace = false;
                     float mouseDirection = Mathf.Atan2((mousePosition.y - Character.transform.position.y), (mousePosition.x - Character.transform.position.x)) * Mathf.Rad2Deg - 90;
@@ -1770,6 +1855,21 @@ public class PlayerStuff : NetworkBehaviour {
                         else
                             RpcFire2(Vector2.zero, mousePosition, "mantaray", playerNum, 0);
                         break;
+                    case 10: // kumari
+                        {
+                            cooldown = 6;
+                            crimsonrite = 3;
+                            int seed = Random.Range(-100, 100);
+                            HP -= 1;
+                            if (!isServer)
+                            {
+                                CmdFire2(new Vector2(moveX, moveY) * stats[5 * chara + 1] * 0.3f, rb.position, "spark0", playerNum, seed);
+                                //Fire2(new Vector2(moveX, moveY), rb.position, "c8, playerNum, seed);
+                            }
+                            else
+                                RpcFire2(new Vector2(moveX, moveY) * stats[5 * chara + 1] * 0.3f, rb.position, "spark0", playerNum, seed);
+                            break;
+                        }
                     case 13: // ezra
                         StartCoroutine(WildMagic());
                         raging = 300;
@@ -1794,6 +1894,16 @@ public class PlayerStuff : NetworkBehaviour {
                             cooldown = 2;
                             break;
                         }
+                    case 21: // tom
+                        cooldown = 5;
+                        if (!isServer)
+                        {
+                            CmdFire2(Vector2.zero, mousePosition, "binding", playerNum, 0);
+                            //Fire2(Vector2.zero, mousePosition, "binding", playerNum, 0);
+                        }
+                        else
+                            RpcFire2(Vector2.zero, mousePosition, "binding", playerNum, 0);
+                        break;
                     case 12: // roscoe
                     case 16: // xenerich
                         invisible = true;
@@ -1890,7 +2000,8 @@ public class PlayerStuff : NetworkBehaviour {
                 StartCoroutine(ResetShift(cooldown));
             }
 
-            rb.MovePosition(rb.position + new Vector2(moveX, moveY) * stats[5 * chara + 1] * Time.fixedDeltaTime * 1.4f);
+            rb.MovePosition(rb.position + new Vector2(moveX, moveY) * stats[5 * chara + 1] * Time.fixedDeltaTime * 1.4f + teleport);
+            teleport = Vector2.zero;
             if (!spawned && chara != -1 && HP != 100)
             {
                 rb.MovePosition(new Vector2(Random.Range(-50, 50), Random.Range(-50, 50)));
@@ -1953,7 +2064,7 @@ public class PlayerStuff : NetworkBehaviour {
             if (Input.GetMouseButtonUp(0))
                 mouseDown = false;
 
-            if ((Input.GetMouseButtonDown(1) || (Input.GetMouseButton(1) && stats[5 * chara + 4] == 1)) && canFire)
+            if ((Input.GetMouseButtonDown(1) || (Input.GetMouseButton(1) && (stats[5 * chara + 4] == 1 || chara == 11))) && canFire)
             {
                 invisible = false;
                 canFire = false;
@@ -2024,7 +2135,7 @@ public class PlayerStuff : NetworkBehaviour {
                 else if (!(chara == 9 && moonbeam))
                 {
                     int rep = 1;
-                    if (chara == 6 || chara == 23)
+                    if (chara == 6 || chara == 23 || chara == 11)
                         rep = 2;
                     else if (chara == 26)
                         rep = 4;
@@ -2255,6 +2366,8 @@ public class PlayerStuff : NetworkBehaviour {
             invisible = false;
             yield return new WaitForSeconds(delay * (slow > 0 ? 2 : 1));
         }
+        if (chara == 10)
+            crimsonrite = 0;
         canShift = true;
     }
 
@@ -2300,7 +2413,7 @@ public class PlayerStuff : NetworkBehaviour {
             slow = Mathf.Max(100, stun);
             yield return new WaitForSeconds(delay * (slow > 0 ? 2 : 1));
         }
-
+        crimsonrite = 0;
         canSpace = true;
     }
 
@@ -2351,7 +2464,7 @@ public class PlayerStuff : NetworkBehaviour {
     {
         yield return new WaitForSeconds(0);
         bool init = false;
-        int effect = Random.Range(0, 9);
+        int effect = Random.Range(0,9);
         while (raging > 0)
         {
             switch (effect)
@@ -2377,8 +2490,8 @@ public class PlayerStuff : NetworkBehaviour {
                         {
                             init = true;
                             shockwave(mouseX, mouseY);
-                            drift.x = (mouseX - transform.position.x) * 2.3f;
-                            drift.y = (mouseY - transform.position.y) * 2.3f;
+                            teleport.x = (mouseX - transform.position.x);
+                            teleport.y = (mouseY - transform.position.y);
                             yield return new WaitForSeconds(0.2f * (slow > 0 ? 2 : 1));
                         }
                         yield return new WaitForSeconds(0.001f);
@@ -2445,9 +2558,20 @@ public class PlayerStuff : NetworkBehaviour {
                         yield return new WaitForSeconds(1.6f * (slow > 0 ? 2 : 1));
                         break;
                     }
-                case 8: // empty
-                    yield return new WaitForSeconds(0.5f);
-                    break;
+                case 8: // subolts
+                    {
+                        Quaternion mouseDirection = Quaternion.Euler(0, 0, Mathf.Atan2((mouseY - Character.transform.position.y), (mouseX - Character.transform.position.x)) * Mathf.Rad2Deg - 90);
+                        int seed = Random.Range(-100, 100);
+                        if (!isServer)
+                        {
+                            CmdFire(mouseDirection, Character.transform.position, "c14", playerNum, seed);
+                            //Fire(mouseDirection, Character.transform.position, "b31", playerNum, seed);
+                        }
+                        else
+                            RpcFire(mouseDirection, Character.transform.position, "c14", playerNum, seed);
+                        yield return new WaitForSeconds(0.2f * (slow > 0 ? 2 : 1));
+                        break;
+                    }
             }
         }
     }

@@ -7,6 +7,10 @@ using Random = UnityEngine.Random;
 
 public class button : NetworkBehaviour {
 
+    byte r, g, b;
+    Color32 c = new Color32(0, 0, 0, 255);
+    int d = 0;
+
 	// Use this for initialization
 	void Start () {
         PlayerStuff.newChar = Random.Range(0, 32);
@@ -19,7 +23,9 @@ public class button : NetworkBehaviour {
         {
             if (i == PlayerStuff.newChar)
             {
-                this.GetComponent<SpriteRenderer>().color = new Color32((byte)Random.Range(100, 255), (byte)Random.Range(100, 255), (byte)Random.Range(100, 255), (byte)255);
+                rainbow((byte)(d % 255));
+                d+=4;
+                this.GetComponent<SpriteRenderer>().color = c;
 
             }
             else
@@ -72,4 +78,32 @@ public class button : NetworkBehaviour {
             }
         }
 	}
+
+    void rainbow(int p)
+    {
+        if (p < 85)
+        {
+            c.r = (byte)(p * 3);
+            c.g = (byte)(255 - p * 3);
+            c.b = 0;
+        }
+        else if (p < 170)
+        {
+            p -= 85;
+            c.r = (byte)(255 - p * 3);
+            c.g = 0;
+            c.b = (byte)(p * 3);
+        }
+        else
+        {
+            p -= 170;
+            c.r = 0;
+            c.g = (byte)(p * 3);
+            c.b = (byte)(255 - p * 3);
+        }
+        c.r = (byte)(85 + c.r * 2 / 3);
+        c.g = (byte)(85 + c.g * 2 / 3);
+        c.b = (byte)(85 + c.b * 2 / 3);
+    }
+    
 }

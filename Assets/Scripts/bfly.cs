@@ -52,6 +52,7 @@ public class bfly : NetworkBehaviour {
     public int marked = 0;
     public bool reveal = false;
     bool invulImmune = false;
+    public bool stat = false;
     Vector3 og_scale;
 
     GameObject[] trails;
@@ -118,7 +119,41 @@ public class bfly : NetworkBehaviour {
     {
         if (owner_obj.GetComponent<PlayerStuff>().frozen > 0)
             return;
-
+        if (!stat)
+        {
+            switch (owner_obj.GetComponent<PlayerStuff>().crimsonrite)
+            {
+                case 0:
+                    break;
+                case 1:
+                    if (!trail)
+                    {
+                        damage = (int)(damage*1.5f);
+                    }
+                    trail = true;
+                    trailGameObject = "fire0";
+                    break;
+                case 2:
+                    if (!trail)
+                    {
+                        damage = (int)(damage * 1.5f);
+                        weakness = 1;
+                    }
+                    trail = true;
+                    trailGameObject = "spark2";
+                    break;
+                case 3:
+                    if (!trail)
+                    {
+                        damage = (int)(damage * 1.4f);
+                        reveal = true;
+                        glowing = 2;
+                    }
+                    trail = true;
+                    trailGameObject = "spark0";
+                    break;
+            }
+        }
         if (c == 0 && lifeRand > 0)
             c = Mathf.Abs(seed) * lifeRand / 100;
         if (speedRand != 0)
