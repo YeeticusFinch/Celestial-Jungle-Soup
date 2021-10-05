@@ -212,7 +212,7 @@ public class bfly : NetworkBehaviour {
             this.transform.localScale = new Vector3(this.transform.localScale.x * (lifetime - c - 1f) / System.Math.Max(lifetime - c, 1), this.transform.localScale.y, this.transform.localScale.z * (lifetime - c - 1f) / System.Math.Max(lifetime - c, 1));
         } else if (id == 30 && c == 0)
             do_trail(rb.position + new Vector2(xVel, yVel) * Time.fixedDeltaTime - 0.5f * (Vector2)transform.up * speed * Time.fixedDeltaTime, new Vector2(xVel + Random.Range(-10, 10) * 0.05f, yVel + Random.Range(-10, 10) * 0.05f), trailGameObject);
-        else if (id == 31 && c > 7)
+        else if ((id == -14 && c > 2) || (id == 31 && c > 7))
         {
             if (trailIndex == 0)
             {
@@ -287,7 +287,7 @@ public class bfly : NetworkBehaviour {
         //Debug.Log("Hit");
         if (other.tag == "wall")
         {
-            if (id == 31)
+            if (id == -14 || id == 31)
             {
                 rb.MovePosition(rb.position - (Vector2)transform.up * speed * Time.fixedDeltaTime - new Vector2(xVel, yVel) * Time.fixedDeltaTime);
                 xVel = 0;
@@ -336,7 +336,7 @@ public class bfly : NetworkBehaviour {
         {
             if (id == 29)
                 GameObject.Destroy(other.gameObject);
-            else if (id == 31)
+            else if (id == -14 || id == 31)
             {
                 rb.MovePosition(rb.position - (Vector2)transform.up * speed * Time.fixedDeltaTime - new Vector2(xVel, yVel) * Time.fixedDeltaTime);
                 xVel = 0;
@@ -356,7 +356,7 @@ public class bfly : NetworkBehaviour {
                 invulImmune = true;
             if (!invulImmune)
             {
-                if (id == 31)
+                if (id == -14 || id == 31)
                 {
                     rb.MovePosition(rb.position - (Vector2)transform.up * speed * Time.fixedDeltaTime - new Vector2(xVel, yVel) * Time.fixedDeltaTime);
                     xVel = 0;

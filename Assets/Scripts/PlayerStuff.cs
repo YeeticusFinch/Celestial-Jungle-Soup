@@ -97,7 +97,7 @@ public class PlayerStuff : NetworkBehaviour {
         raging = r;
     }
 
-    String[] names = { "Osman", "Anand", "Abraham", "Carl", "Claire", "Anton", "Bad Bitch", "Rudy Barrow", "Fern Hana", "Lilly Moonriver", "Kumari", "Rok Son Hak", "Roscoe Tosscobble", "Ezra", "Tenzo Inukami", "Ollie North", "Xenerich Quorin", "Knope Rollen", "Brad", "Beerstein Brewbeard", "Kohou Tekka", "Tom Nightshade", "Hastur", "Einma Ma'yera", "Basti Theyla", "Puw Llewyn", "MetalMythicMaster","Iosef Stalin","Durrith Vamor","Acoda Va'Suun","Lenin","Pickle Rick","Galon *Bean Man*" };
+    String[] names = { "Big O", "Rocket Man", "Yeet Bruh Ham", "Big C", "Nyalarthoswoleclaireat", "Babouche", "Bad Bitch", "Rudy Barrow", "Fern Hana", "Lilly Moonriver", "Kumari", "Rok Son Hak", "Roscoe Tosscobble", "Ezra", "Tenzo Inukami", "Ollie North", "Xenerich Quorin", "Knope Rollen", "Brad", "Beerstein Brewbeard", "Kohou Tekka", "Tom Nightshade", "Hastur", "Einma Ma'yera", "Basti Theyla", "Puw Llewyn", "MetalMythicMaster","Iosef Stalin","Durrith Vamor","Acoda Va'Suun","Lenin","Pickle Rick","Galon *Bean Man*" };
 
     String[] abilities =
     {
@@ -152,7 +152,7 @@ public class PlayerStuff : NetworkBehaviour {
         "Healing Spirit",//
 
         "Rapier",//
-        "Bolt",
+        "Bolt",//
         "Crimson Rite of Storm",
         "Crimson Rite of Dawn",
 
@@ -162,9 +162,9 @@ public class PlayerStuff : NetworkBehaviour {
         "Rage",//
 
         "Shortsword",//
-        "Dart",
+        "Dart",//
         "Donkey",//
-        "Fade Away",
+        "Fade Away",//
 
         "Greatsword",//
         "Healing Hands",//
@@ -172,9 +172,9 @@ public class PlayerStuff : NetworkBehaviour {
         "Wild Surge Rage",//
 
         "Unnarmed Strike",//
-        "Sun Bolt",
+        "Sun Bolt",//
         "Step of the Wind",//
-        "Stunning Strike",
+        "Stunning Strike",//
 
         "Big Iron",//
         "-5 + 10",//
@@ -202,9 +202,9 @@ public class PlayerStuff : NetworkBehaviour {
         "Shield",//
 
         "Kitsune Claws",//
-        "Sun Bolt",
-        "Dash",//
-        "Stunning Strike",
+        "Sun Bolt",//
+        "Fox Agility",//
+        "Stunning Strike",//
 
         "Mouth Sword",//
         "Hand Crossbow",
@@ -312,7 +312,7 @@ public class PlayerStuff : NetworkBehaviour {
         -2,
         1.5f,
         //Tenzo
-        4,
+        3,
         0.15f,
         //Ollie
         12,
@@ -330,7 +330,7 @@ public class PlayerStuff : NetworkBehaviour {
         2,
         1.2f,
         //Kohou
-        4,
+        3,
         0.15f,
         //Tom Nightshade
         4,
@@ -1778,6 +1778,23 @@ public class PlayerStuff : NetworkBehaviour {
                             CmdRagingSync(raging);
                         cooldown = 10;
                         break;
+                    case 14: // tenzo
+                    case 20: // kohou
+                        {
+                            float mouseDirection = Mathf.Atan2((mousePosition.y - Character.transform.position.y), (mousePosition.x - Character.transform.position.x)) * Mathf.Rad2Deg - 90;
+                            int seed = Random.Range(-100, 100);
+                            if (!isServer)
+                            {
+                                CmdFire(Quaternion.Euler(0, 0, mouseDirection), Character.transform.position, "stunstrike", playerNum, seed);
+                                //Fire(Quaternion.Euler(0, 0, mouseDirection), Character.transform.position, "d15", playerNum, seed);
+                            }
+                            else
+                                RpcFire(Quaternion.Euler(0, 0, mouseDirection), Character.transform.position, "stunstrike", playerNum, seed);
+
+                            cooldown = 2;
+                            break;
+                        }
+                    case 12: // roscoe
                     case 16: // xenerich
                         invisible = true;
                         cooldown = 5;
@@ -2233,7 +2250,7 @@ public class PlayerStuff : NetworkBehaviour {
     IEnumerator ResetShift(float delay = 0f)
     {
         yield return new WaitForSeconds(delay * (slow > 0 ? 2 : 1));
-        if (chara == 16)
+        if (chara == 16 || chara == 12)
         {
             invisible = false;
             yield return new WaitForSeconds(delay * (slow > 0 ? 2 : 1));
