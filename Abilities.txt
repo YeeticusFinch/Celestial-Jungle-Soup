@@ -25,7 +25,7 @@ Puw: Vicious Mockery, Pistol, Silence, Hideous Laughter (stun)
 
 -MetalMythiccc: fireball, magic missiles (4), chronal shift, shield
 Stalin: hammer, pistol, frenzy attack, rage
--Durrith: dagger, guiding bolt, pyrotechnics (smoke), cure wounds
+-Durrith: dagger, guiding bolt, pyrotechnics (smoke), healing word
 
 -Acoda: Disintegrate, Ray of Enfeeblement, Globe of Invulnerability, Time Stop
 Lenin: Tokarev, Maskirovka, Sealed Train, Red Terror
