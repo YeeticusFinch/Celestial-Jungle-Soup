@@ -24,7 +24,7 @@ Basti: Greatsword, Firebolt, Manifest Echo, Swap places with Echo
 Puw: Vicious Mockery, Pistol, Silence, Hideous Laughter (stun)
 
 -MetalMythiccc: fireball, magic missiles (4), chronal shift, shield
-Stalin: hammer, pistol, some communist thing, rage
+Stalin: hammer, pistol, frenzy attack, rage
 -Durrith: dagger, guiding bolt, pyrotechnics (smoke), cure wounds
 
 -Acoda: Disintegrate, Ray of Enfeeblement, Globe of Invulnerability, Time Stop
